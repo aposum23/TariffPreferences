@@ -3,27 +3,44 @@ import SliderInput from "@/components/inputs/SliderInput.vue";
 import PhoneNumber from "@/components/inputs/PhoneNumber.vue";
 import {ref} from "vue";
 import CheckboxInput from "@/components/inputs/CheckboxInput.vue";
+import {useTariffPreferencesStore} from "@/stores/tariffPreferences.ts";
 
 const phone = ref('');
 const minutes = ref(0);
 const sms = ref(2);
 const ethernet = ref(0);
 const addRouter = ref<boolean>(false);
+
+const tariffPreferencesStore = useTariffPreferencesStore();
 </script>
 
 <template>
   <form class="tariff-preferences">
     <h1 class="tariff-preferences__header">Настройте тариф</h1>
     <p class="input-label">Телефон</p>
-    <PhoneNumber v-model="phone"/>
+    <PhoneNumber v-model="tariffPreferencesStore.formData.phoneNumber"/><!--Нужно поправить размер этого поля ввода-->
     <p class="input-label">Минуты</p>
-    <SliderInput color="main" :values="[100, 200, 300, 600]" v-model="minutes" measurement="мин."/>
+    <!--У слайдеров нужно поправить отображения цифр чтобы было красивенько :)-->
+    <SliderInput
+        color="main"
+        :available-values="tariffPreferencesStore.minutesAvailableValues"
+        v-model="tariffPreferencesStore.formData.minutesValue"
+        measurement="мин."
+    />
     <p class="input-label">СМС</p>
-    <SliderInput :values="[0, 50, 100, 150]" v-model="sms" measurement="шт."/>
+    <SliderInput
+        :available-values="tariffPreferencesStore.smsAvailableValues"
+        v-model="tariffPreferencesStore.formData.smsValue"
+        measurement="шт."
+    />
     <p class="input-label">Интернет</p>
-    <SliderInput :values="[5, 10, 15, 25]" v-model="ethernet" measurement="ГБ."/>
+    <SliderInput
+        :available-values="tariffPreferencesStore.ethernetAvailableValues"
+        v-model="tariffPreferencesStore.formData.ethernetValue"
+        measurement="ГБ."
+    />
     <p class="input-label">WiFi роутер</p>
-    <CheckboxInput v-model="addRouter">Аренда <b>99</b>&#8381;/мес.</CheckboxInput>
+    <CheckboxInput v-model="tariffPreferencesStore.formData.addRouter">Аренда <b>{{tariffPreferencesStore.routerPrice}}</b>&#8381;/мес.</CheckboxInput>
   </form>
 </template>
 
