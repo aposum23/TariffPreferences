@@ -9,7 +9,7 @@ const props = defineProps<{
   values: number[],
   modelValue: number,
   measurement: string,
-  color: 'main' | 'additional'
+  color?: 'main' | 'additional'
 }>();
 
 const index = ref<number>(props.modelValue || 0);
@@ -47,7 +47,7 @@ const progress = computed(() => (index.value / (props.values.length - 1)) * 100)
 .slider-container {
   text-align: center;
   font-family: Arial, sans-serif;
-  margin-top: 20px;
+  padding-top: 9px;
   position: relative;
   width: 100%;
 }
