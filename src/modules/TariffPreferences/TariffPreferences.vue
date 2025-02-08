@@ -1,18 +1,25 @@
 <script setup lang="ts">
 import SliderInput from "@/components/inputs/SliderInput.vue";
+import PhoneNumber from "@/components/inputs/PhoneNumber.vue";
+import {ref} from "vue";
+
+const phone = ref('');
+const minutes = ref(0);
+const sms = ref(2);
+const ethernet = ref(0);
 </script>
 
 <template>
   <form class="tariff-preferences">
     <h1 class="tariff-preferences__header">Настройте тариф</h1>
     <p class="input-label">Телефон</p>
-    <input type="text"/>
+    <PhoneNumber v-model="phone"/>
     <p class="input-label">Минуты</p>
-    <SliderInput color="main" :values="[100, 200, 300, 600]" model-value="" measurement="мин."/>
+    <SliderInput color="main" :values="[100, 200, 300, 600]" v-model="minutes" measurement="мин."/>
     <p class="input-label">СМС</p>
-    <SliderInput :values="[0, 50, 100, 150]" model-value="" measurement="шт."/>
+    <SliderInput :values="[0, 50, 100, 150]" v-model="sms" measurement="шт."/>
     <p class="input-label">Интернет</p>
-    <SliderInput :values="[5, 10, 15, 25]" model-value="" measurement="ГБ."/>
+    <SliderInput :values="[5, 10, 15, 25]" v-model="ethernet" measurement="ГБ."/>
     <p class="input-label">WiFi роутер</p>
     <input type="checkbox"/>
   </form>
