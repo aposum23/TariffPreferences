@@ -1,10 +1,6 @@
 <script setup lang="ts">
 import {ref, watch} from "vue";
 
-const isFilled = ref<boolean>(true);
-
-const value = ref<string>('');
-
 const emit = defineEmits<{
   'update:modelValue': [string]
 }>();
@@ -14,26 +10,25 @@ const props = defineProps<{
 }>();
 
 const phoneNumber = ref<string>(props.modelValue || '');
+const isValueChanged = ref<boolean>(false);
 
 const setSymbols = (phoneString: string): void => {
   let numbers = phoneString.replace(/\D/g, '');
 
-  if (numbers.length === 1 && !phoneNumber.value.includes('+7')) {
-    phoneNumber.value = `+7(${numbers}`;
-  }
-  if (numbers.length === 4 && phoneNumber.value.length === 6)
-    phoneNumber.value += ')'
-  else if (numbers.length === 7 && phoneNumber.value.length === 10)
-    phoneNumber.value += '-'
-  else if (numbers.length === 9 && phoneNumber.value.length === 13)
-    phoneNumber.value += '-'
+  if (numbers.length > 11) numbers = numbers.slice(0, 11);
 
-  emit('update:modelValue', phoneNumber.value)
+  phoneNumber.value =
+      numbers.length > 1
+          ? `+7(${numbers.slice(1, 4)})${numbers.slice(4, 7)}-${numbers.slice(7, 9)}-${numbers.slice(9, 11)}`
+          : numbers.length > 0 ? '+7(' : '';
+
+  emit('update:modelValue', phoneNumber.value);
+  isValueChanged.value = true;
 }
 
 const clearSymbols = (phoneString: string): void => {
   if (phoneString === '+7(')
-    value.value = ''
+    phoneNumber.value = ''
 }
 
 watch(
@@ -43,15 +38,25 @@ watch(
 </script>
 
 <template>
-  <input
-      class="phone-number "
-      :class="isFilled ? '' : 'wrong-validation'"
-      type="text"
-      placeholder="+7(___)___-__-__"
-      maxlength="16"
-      v-model="phoneNumber"
-      @focusout="clearSymbols(phoneNumber)"
-  />
+  <div class="input-wrapper">
+    <input
+        class="phone-number"
+        :class="{ 'wrong-validation': phoneNumber.length === 0 && isValueChanged }"
+        type="text"
+        placeholder="+7(___)___-__-__"
+        maxlength="16"
+        v-model="phoneNumber"
+        @focusout="clearSymbols(phoneNumber)"
+    />
+    <img
+        v-if="phoneNumber.length === 0 && isValueChanged"
+        class="error-icon"
+        src="./icons/error.png"
+    />
+    <p v-if="phoneNumber.length === 0 && isValueChanged" class="error-message">
+      Поле не должно быть пустым
+    </p>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -69,6 +74,35 @@ watch(
 }
 
 .wrong-validation {
-  outline: 2px solid #EB5757
+  outline: 2px solid #EB5757 !important;
+}
+
+.input-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.phone-number {
+  padding: 10px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  width: 220px;
+  outline: none;
+}
+
+.error-icon {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #EB5757;
+  font-size: 18px;
+}
+
+.error-message {
+  position: absolute;
+  color: #EB5757;
+  font-size: 12px;
+  margin-top: 5px;
 }
 </style>
