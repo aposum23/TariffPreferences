@@ -1,25 +1,32 @@
 <script setup lang="ts">
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 
 const emit = defineEmits<{
   'update:modelValue': [number]
 }>();
 
 const props = defineProps<{
-  values: number[],
+  availableValues: number[],
   modelValue: number,
   measurement: string,
   color?: 'main' | 'additional'
 }>();
 
-const index = ref<number>(props.modelValue || 0);
+const index = ref<number>(0);
 
 watch(
     () => index.value,
-    (newValue) => emit('update:modelValue', newValue)
+    (newValue) => emit('update:modelValue', props.availableValues[newValue])
 );
 
-const progress = computed(() => (index.value / (props.values.length - 1)) * 100);
+onMounted(() => {
+  const valueIndex = props.availableValues.findIndex((value) => value === props.modelValue);
+  if (valueIndex !== -1) {
+    index.value = valueIndex
+  }
+})
+
+const progress = computed(() => (index.value / (props.availableValues.length - 1)) * 100);
 </script>
 
 <template>
@@ -28,7 +35,7 @@ const progress = computed(() => (index.value / (props.values.length - 1)) * 100)
         type="range"
         v-model="index"
         :min="0"
-        :max="values.length - 1"
+        :max="availableValues.length - 1"
         step="1"
         class="slider"
         :style="`background:
@@ -36,8 +43,8 @@ const progress = computed(() => (index.value / (props.values.length - 1)) * 100)
           --bg-color: ${color === 'main' ? '#7d5fff' : '#000000'}`"
     >
     <div class="slider-labels">
-      <span v-for="(val, idx) in values" :key="idx" class="label" :class="{ active: idx === index }">
-        {{ val }}<span v-if="val === values[index]">{{` ${measurement}`}}</span>
+      <span v-for="(val, idx) in availableValues" :key="idx" class="label" :class="{ active: idx === index }">
+        {{ val }}<span v-if="val === availableValues[index]">{{` ${measurement}`}}</span>
       </span>
     </div>
   </div>
