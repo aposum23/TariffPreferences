@@ -4,6 +4,7 @@ import PhoneNumber from "@/components/inputs/PhoneNumber.vue";
 import {ref} from "vue";
 import CheckboxInput from "@/components/inputs/CheckboxInput.vue";
 import {useTariffPreferencesStore} from "@/stores/tariffPreferences.ts";
+import ButtonControl from "@/components/UI/ButtonControl.vue";
 
 const phone = ref('');
 const minutes = ref(0);
@@ -41,6 +42,12 @@ const tariffPreferencesStore = useTariffPreferencesStore();
     />
     <p class="input-label">WiFi роутер</p>
     <CheckboxInput v-model="tariffPreferencesStore.formData.addRouter">Аренда <b>{{tariffPreferencesStore.routerPrice}}</b>&#8381;/мес.</CheckboxInput>
+    <ButtonControl
+        class="tariff-preferences__send-form"
+        @click="() => tariffPreferencesStore.saveForm()"
+    >
+      <b>{{tariffPreferencesStore.calculatedPrice}} &#8381;</b> в месяц
+    </ButtonControl>
   </form>
 </template>
 
@@ -53,6 +60,11 @@ const tariffPreferencesStore = useTariffPreferencesStore();
   &__header {
     font-size: 64px;
     font-weight: 700;
+  }
+
+  &__send-form {
+    margin-top: 90px;
+    width: fit-content;
   }
 }
 
