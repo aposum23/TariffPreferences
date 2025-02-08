@@ -2,11 +2,13 @@
 import SliderInput from "@/components/inputs/SliderInput.vue";
 import PhoneNumber from "@/components/inputs/PhoneNumber.vue";
 import {ref} from "vue";
+import CheckboxInput from "@/components/inputs/CheckboxInput.vue";
 
 const phone = ref('');
 const minutes = ref(0);
 const sms = ref(2);
 const ethernet = ref(0);
+const addRouter = ref<boolean>(false);
 </script>
 
 <template>
@@ -21,7 +23,7 @@ const ethernet = ref(0);
     <p class="input-label">Интернет</p>
     <SliderInput :values="[5, 10, 15, 25]" v-model="ethernet" measurement="ГБ."/>
     <p class="input-label">WiFi роутер</p>
-    <input type="checkbox"/>
+    <CheckboxInput v-model="addRouter">Аренда <b>99</b>&#8381;/мес.</CheckboxInput>
   </form>
 </template>
 
