@@ -32,7 +32,7 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
     })
 
     const saveForm = (): void => {
-        if (formData.phoneNumber) {
+        if (formData.value.phoneNumber) {
             const formDataJSON: string = JSON.stringify(formData.value)
 
             alert(formDataJSON);
