@@ -13,6 +13,7 @@ const tariffPreferencesStore = useTariffPreferencesStore();
     <h1 class="tariff-preferences__header">Настройте тариф</h1>
     <p class="input-label">Телефон</p>
     <PhoneNumber
+        class="tariff-preferences__phone-number"
         v-model="tariffPreferencesStore.formData.phoneNumber"
         v-model:validations="tariffPreferencesStore.validations.phoneNumber"
     /><!--Нужно поправить размер этого поля ввода-->
@@ -56,6 +57,22 @@ const tariffPreferencesStore = useTariffPreferencesStore();
   &__header {
     font-size: 64px;
     font-weight: 700;
+  }
+
+  &__phone-number {
+    width: 25%;
+  }
+
+  @media(max-width: 1280px) {
+    &__phone-number {
+      width: 50%;
+    }
+  }
+
+  @media(max-width: 740px) {
+    &__phone-number {
+      width: 100%;
+    }
   }
 
   &__send-form {

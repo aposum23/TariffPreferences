@@ -68,6 +68,7 @@ watch(
   font-weight: 400;
   padding: 18px 16px;
   outline: none;
+  width: 100%;
 
   &:focus {
     outline: 2px solid #7A5CFA;
@@ -83,21 +84,12 @@ watch(
   display: inline-block;
 }
 
-.phone-number {
-  padding: 10px;
-  border: 2px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
-  width: 220px;
-  outline: none;
-}
-
 .error-icon {
   position: absolute;
-  right: 10px;
-  top: 10px;
+  right: 0;
+  top: calc(50% - 12px);
   color: #EB5757;
-  font-size: 18px;
+  font-size: 24px;
 }
 
 .error-message {

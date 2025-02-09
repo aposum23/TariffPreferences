@@ -104,5 +104,7 @@ const progress = computed(() => (index.value / (props.availableValues.length - 1
   font-size: 16px;
   font-weight: bold;
   color: black;
+  min-width: 27px;
+  max-width: fit-content;
 }
 </style>

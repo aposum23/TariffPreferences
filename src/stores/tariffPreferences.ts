@@ -55,10 +55,6 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
         }
     }
 
-    const getForm = (): void => {
-        formData.value = JSON.parse(localStorage.getItem('tariff'));
-    }
-
     return {
         minutesAvailableValues,
         smsAvailableValues,
@@ -68,6 +64,5 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
         routerPrice,
         calculatedPrice,
         saveForm,
-        getForm
     }
 });
