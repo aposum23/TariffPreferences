@@ -2,15 +2,16 @@
 import {ref, watch} from "vue";
 
 const emit = defineEmits<{
-  'update:modelValue': [string]
+  'update:modelValue': [string],
+  'update:validations': [boolean]
 }>();
 
 const props = defineProps<{
-  modelValue: string
+  modelValue: string,
+  validations: boolean,
 }>();
 
 const phoneNumber = ref<string>(props.modelValue || '');
-const isValueChanged = ref<boolean>(false);
 
 const setSymbols = (phoneString: string): void => {
   let numbers = phoneString.replace(/\D/g, '');
@@ -23,7 +24,7 @@ const setSymbols = (phoneString: string): void => {
           : numbers.length > 0 ? '+7(' : '';
 
   emit('update:modelValue', phoneNumber.value);
-  isValueChanged.value = true;
+  emit('update:validations', phoneNumber.value.length > 0);
 }
 
 const clearSymbols = (phoneString: string): void => {
@@ -41,7 +42,7 @@ watch(
   <div class="input-wrapper">
     <input
         class="phone-number"
-        :class="{ 'wrong-validation': phoneNumber.length === 0 && isValueChanged }"
+        :class="{ 'wrong-validation': !validations }"
         type="text"
         placeholder="+7(___)___-__-__"
         maxlength="16"
@@ -49,11 +50,11 @@ watch(
         @focusout="clearSymbols(phoneNumber)"
     />
     <img
-        v-if="phoneNumber.length === 0 && isValueChanged"
+        v-if="!validations"
         class="error-icon"
         src="./icons/error.png"
     />
-    <p v-if="phoneNumber.length === 0 && isValueChanged" class="error-message">
+    <p v-if="!validations" class="error-message">
       Поле не должно быть пустым
     </p>
   </div>
