@@ -1,16 +1,9 @@
 <script setup lang="ts">
 import SliderInput from "@/components/inputs/SliderInput.vue";
 import PhoneNumber from "@/components/inputs/PhoneNumber.vue";
-import {ref} from "vue";
 import CheckboxInput from "@/components/inputs/CheckboxInput.vue";
 import {useTariffPreferencesStore} from "@/stores/tariffPreferences.ts";
 import ButtonControl from "@/components/UI/ButtonControl.vue";
-
-const phone = ref('');
-const minutes = ref(0);
-const sms = ref(2);
-const ethernet = ref(0);
-const addRouter = ref<boolean>(false);
 
 const tariffPreferencesStore = useTariffPreferencesStore();
 </script>
@@ -19,7 +12,10 @@ const tariffPreferencesStore = useTariffPreferencesStore();
   <form class="tariff-preferences">
     <h1 class="tariff-preferences__header">Настройте тариф</h1>
     <p class="input-label">Телефон</p>
-    <PhoneNumber v-model="tariffPreferencesStore.formData.phoneNumber"/><!--Нужно поправить размер этого поля ввода-->
+    <PhoneNumber
+        v-model="tariffPreferencesStore.formData.phoneNumber"
+        v-model:validations="tariffPreferencesStore.validations.phoneNumber"
+    /><!--Нужно поправить размер этого поля ввода-->
     <p class="input-label">Минуты</p>
     <!--У слайдеров нужно поправить отображения цифр чтобы было красивенько :)-->
     <SliderInput

@@ -19,6 +19,9 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
         phoneNumber: '',
         addRouter: false
     });
+    const validations = ref<{[K:string]: boolean}>({
+        phoneNumber: true
+    });
 
     const calculatedPrice = computed((): number => {
         let calculatedValue = 0;
@@ -31,8 +34,19 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
         return calculatedValue;
     })
 
+    const checkValidations = (): boolean => {
+        for (const validKey of Object.keys(validations.value)) {
+            if (!validations.value[validKey] || !formData.value[validKey]) {
+                validations.value[validKey] = false;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     const saveForm = (): void => {
-        if (formData.value.phoneNumber) {
+        if (checkValidations()) {
             const formDataJSON: string = JSON.stringify(formData.value)
 
             alert(formDataJSON);
@@ -50,6 +64,7 @@ export const useTariffPreferencesStore = defineStore('tariffPreferences', () => 
         smsAvailableValues,
         ethernetAvailableValues,
         formData,
+        validations,
         routerPrice,
         calculatedPrice,
         saveForm,
